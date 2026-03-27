@@ -1,0 +1,16 @@
+requests==2.31.0
+python-dotenv==1.0.1
+feedparser==6.0.11
+beautifulsoup4==4.12.3
+# lxml is optional (faster HTML parsing) — install with: pip install lxml --only-binary=:all:
+# If it fails on your platform, fetcher.py automatically uses html.parser (stdlib fallback)
+
+# ── Phase 2 — Embedding + Vector Store ───────────────────────────────────────
+sentence-transformers==3.0.1
+faiss-cpu>=1.9.0
+numpy>=1.26
+
+# \u2500\u2500 Phase 3 \u2014 Retrieval Pipeline + FastAPI \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+httpx==0.27.0
