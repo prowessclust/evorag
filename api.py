@@ -27,7 +27,7 @@ from config import (
     RETRIEVAL_TOP_K,
 )
 from embedder import load_index
-from retriever import answer_async, retrieve
+from personas import answer_multi_persona_async
 
 logging.basicConfig(
     level=logging.INFO,
@@ -88,9 +88,13 @@ class SourceItem(BaseModel):
     score:  float
 
 
+class PersonaResponse(BaseModel):
+    persona: str
+    answer: str
+
 class QueryResponse(BaseModel):
     query:   str
-    answer:  str
+    responses: List[PersonaResponse]
     sources: List[SourceItem]
 
 
@@ -129,7 +133,7 @@ async def query_endpoint(req: QueryRequest):
     log.info(f"POST /query — '{req.query[:60]}' (top_k={req.top_k})")
 
     try:
-        result = await answer_async(req.query, top_k=req.top_k)
+        result = await answer_multi_persona_async(req.query, top_k=req.top_k)
     except ConnectionError as e:
         raise HTTPException(status_code=503, detail=str(e))
     except Exception as e:
@@ -138,7 +142,7 @@ async def query_endpoint(req: QueryRequest):
 
     return QueryResponse(
         query=result["query"],
-        answer=result["answer"],
+        responses=[PersonaResponse(**r) for r in result["responses"]],
         sources=[SourceItem(**s) for s in result["sources"]],
     )
 

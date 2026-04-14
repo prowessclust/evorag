@@ -6,6 +6,9 @@ All tunable constants live here so every phase imports from one place.
 # ── Phase 2 — Embedding + Vector Store (added below Phase 1 constants)
 
 import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 from pathlib import Path
 
 # ── Project root ──────────────────────────────────────────────────────────────

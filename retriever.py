@@ -62,7 +62,7 @@ def retrieve(query: str, top_k: int = RETRIEVAL_TOP_K) -> List[Dict]:
 # 2. PROMPT ASSEMBLY
 # ══════════════════════════════════════════════════════════════════════════════
 
-def build_prompt(query: str, chunks: List[Dict]) -> str:
+def build_prompt(query: str, chunks: List[Dict], system_override: str = None) -> str:
     """
     Assemble a RAG prompt from the retrieved chunks.
 
@@ -74,11 +74,12 @@ def build_prompt(query: str, chunks: List[Dict]) -> str:
     Args:
         query:  The original user question.
         chunks: List of retrieved chunk dicts (must have 'text', 'title', 'source').
+        system_override: Optional persona string to replace the default instruction.
 
     Returns:
         The full prompt string to send to Ollama.
     """
-    system = (
+    system = system_override if system_override else (
         "You are a factual news analysis assistant. "
         "Use ONLY the context passages provided below to answer the question. "
         "Cite the passage number (e.g. [1], [2]) when you use information from it. "
@@ -173,7 +174,7 @@ async def ask_ollama_async(prompt: str, model: str = OLLAMA_MODEL) -> str:
     }
     log.info(f"[async] Calling Ollama ({model}) — prompt length: {len(prompt)} chars")
     try:
-        async with httpx.AsyncClient(timeout=300.0) as client:
+        async with httpx.AsyncClient(timeout=None) as client:
             resp = await client.post(url, json=payload)
             resp.raise_for_status()
             data = resp.json()

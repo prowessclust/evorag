@@ -17,6 +17,10 @@ Usage (module — import from Phase 3):
     results = query("AI regulation policy", top_k=5)
 """
 
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 import argparse
 import glob
 import json
