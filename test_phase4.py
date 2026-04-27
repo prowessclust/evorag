@@ -16,7 +16,7 @@ try:
         response = client.post(
             f"{API_URL}/query",
             json={
-                "query": "What are the latest developments in artificial intelligence?",
+                "query": "What are the pros and cons of online education?",
                 "top_k": 2
             }
         )
